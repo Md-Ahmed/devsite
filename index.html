@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<title>Company Site</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap" rel="stylesheet">
+
+	<style>
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		font-family: "montserrat";
+	}
+	html {
+		scroll-behavior: smooth;
+	}
+	a {
+		color: #fff;
+		text-decoration: none;
+	}
+	ul {
+		list-style-type: none;
+	}
+	footer {
+		padding: 2rem;
+		background-color: #000;
+		color: #fff;
+		display: grid;
+		grid-auto-flow: column;
+	}
+	footer div>:first-child {
+		margin-bottom: 1rem;
+	}
+	footer a {
+		--transition-duration: .3s;
+		color: #bbb;
+		transition: color var(--transition-duration);
+	}
+	footer a:hover {
+		color: #fff;
+	}
+	footer a::after {
+		position: absolute;
+		content: "→";
+		opacity: 0;
+	}
+	footer a:hover::after {
+		opacity: 100;
+		translate: 5px 0;
+		transition-property: opacity, translate;
+		transition-duration: var(--transition-duration);
+	}
+	.hero {
+		min-height: 100svh;
+		background-color: #1976D2;
+		color: #fff;
+		display: grid;
+		gap: 5rem;
+		grid-auto-flow: column;
+		align-items: center;
+		justify-content: center;
+	}
+	.hero h1 {
+		--font-size: clamp(2rem, 6vw, 8rem);
+		font-size: var(--font-size);
+		line-height: var(--font-size);
+	}
+	.hero-anim {
+		height: 1em;
+		overflow: hidden;
+	}
+	.hero-anim div {
+		position: relative;
+		top: 0;
+		text-transform: uppercase;
+		animation: 5s ease-in-out 0s infinite hero-text;
+	}
+	.hero a {
+		display: block;
+		width: fit-content;
+		cursor: pointer;
+		padding: 1rem 2rem;
+		background-color: #000;
+		font-weight: bold;
+		font-size: 1.5rem;
+		margin-block: 2rem;
+	}
+	.hero a:hover {
+		background-color: #fff;
+		color: #000;
+	}
+	.card-container {
+		position: relative;
+	}
+	.card-grid {
+		padding: 5rem;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 2.5rem;
+	}
+	.card-grid>*:first-child {
+		grid-column: span 2;
+		grid-row: span 2;
+		font-size: 2em;
+	}
+	.card-grid>*:first-child svg {
+		width: 8rem;
+		height: 8rem;
+	}
+	.card-bg {
+		position: absolute;
+		background-color: #fc1b80;
+		inset: 0;
+		z-index: -1;
+	}
+	.card-blobs {
+		position: absolute;
+		/*clip-path: url(#blobs);*/
+		background-color: #fa68ab;
+		inset: 0;
+		z-index: -1;
+	}
+	.card {
+		border: 2px solid #fff;
+		padding: 1rem 2rem;
+		color: #fff;
+
+		background: rgba(255, 255, 255, 0.2);
+		border-radius: 16px;
+		box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+		/*backdrop-filter: blur(5px);*/
+		border: 1px solid rgba(255, 255, 255, 0.3);
+	}
+	.card svg {
+		width: 4rem;
+		height: 4rem;
+	}
+	.card h2 {
+		margin-bottom: 1rem;
+	}
+
+	.testimonials {
+		padding: 5rem;
+		display: grid;
+		grid-auto-flow: column;
+		gap: 1rem;
+	}
+	.testimony {
+		padding: 2rem;
+		background-color: #eee;
+		border: 1px solid #0008;
+		border-radius: 12px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+	}
+	.testimony img {
+		border: 5px solid #fff;
+		border-radius: 50%;
+		width: 200px;
+		aspect-ratio: 1;
+		box-shadow: 0 0 20px #0006;
+	}
+	.testimony .details {
+		text-align: center;
+	}
+	.testimony span {
+		opacity: 50%;
+	}
+
+	.contact {
+		--border-inner: 1px solid #000;
+		--border-outer: 2px solid #000;
+		--contact-padding: 5rem;
+		padding: var(--contact-padding);
+		background-color: #ECEFF1;
+		display: grid;
+		grid-auto-flow: column;
+		justify-items: center;
+		align-items: center;
+	}
+	.contact iframe {
+		--size: 30vw;
+		width: var(--size);
+		height: var(--size);
+	}
+	.contact a {
+		transition: background-color 300ms;
+	}
+	.contact svg {
+		position: relative;
+		bottom: -2px;
+	}
+	.contact-links {
+		width: fit-content;
+		grid-column: 2 / 3;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: 1fr auto .5fr;
+	}
+	.contact .email {
+		color: #000;
+		background-color: #fff;
+		border: var(--border-outer);
+		border-radius: 12px;
+		grid-column: 1 / 3;
+		grid-row: 4 / 5
+	}
+	.contact .email:hover {
+		background-color: #eee;
+	}
+	.contact-phone {
+		border: var(--border-outer);
+		border-radius: 12px;
+		overflow: hidden;
+		grid-column: 1 / 3;
+		grid-row: 1 / 3;
+		display: grid;
+		grid-template-columns: subgrid;
+	}
+	.contact-phone>*,
+	.contact .email{
+		padding: 1rem;
+		text-align: center;
+		font-size: 1.2rem;
+	}
+	.contact-phone span {
+		border-bottom: var(--border-inner);
+		grid-column: 1 / 3;
+		font-size: 1.5rem;
+		font-weight: bold;
+		background-color: #fff;
+	}
+	.contact-phone .call {
+		background-color: #2196F3;
+		border-right: var(--border-inner);
+	}
+	.contact-phone .call:hover {
+		background-color: #1976D2;
+	}
+	.contact-phone .whatsapp {
+		background-color: #4CAF50;
+	}
+	.contact-phone .whatsapp:hover {
+		background-color: #388E3C;
+	}
+
+	.filler {
+		width: 250px;
+		height: 250px;
+		background-color: #fff;
+		opacity: 75%;
+		animation: 6s ease-in-out 0s infinite rotate-box;
+	}
+
+	.filler-2 {
+		margin-left: 200px;
+		width: 50px;
+		height: 50px;
+		background-color: #fff;
+		opacity: 25%;
+		animation: 6s ease-in-out 0s infinite rotate-box-2;
+	}
+
+	@keyframes hero-text {
+		0% {
+			top: 0;
+		}
+		10%, 20% {
+			top: -1em;
+		}
+		30%, 40% {
+			top: -2em;
+		}
+		50%, 60% {
+			top: -3em;
+		}
+		70%, 100% {
+			top: -4em;
+		}
+	}
+
+
+	@media screen and (max-width: 700px) {
+		.hero {
+			grid-auto-flow: row;
+		}
+		.hero h1 {
+			--font-size: clamp(2rem, 16vw, 8rem);
+		}
+		.hero-right {
+			grid-row: 1 / 2;
+		}
+	}
+	@media screen and (max-width: 1000px) {
+		.testimonials {
+			padding: 2rem;
+			grid-auto-flow: row;
+		}
+		.card-grid {
+			padding: 2rem;
+			display: flex;
+			flex-direction: column;
+		}
+		.card-grid>*:first-child {
+			font-size: initial;
+		}
+		.card-grid>*:first-child svg {
+			width: 4rem;
+			height: 4rem;
+		}
+		.contact {
+			--contact-padding: 2rem;
+			grid-auto-flow: row;
+			gap: 2rem;
+		}
+		.contact iframe {
+			--size: calc(100vw - var(--contact-padding) * 2);
+		}
+		.contact-links {
+			grid-row: 1 / 2;
+			grid-column: 1 / 2;
+		}
+		footer {
+			grid-auto-flow: row;
+			gap: 1rem;
+		}
+	}
+	</style>
+</head>
+<body>
+	<div class="hero">
+		<div class="hero-left">
+			<h1>We<br>Make
+				<ul class="hero-anim">
+					<div>
+						<li>Websites</li>
+						<li>Apps</li>
+						<li>Brands</li>
+						<li>Adverts</li>
+						<li>Websites</li>
+					</div>
+				</ul>
+			</h1>
+			<a href="#contact">Contact</a>
+		</div>
+		<div class="hero-right">
+			<div class="filler"></div>
+			<div class="filler-2"></div>
+		</div>
+	</div>
+	<div class="card-container" id="services">
+		<div class="card-bg"></div>
+		<div class="card-blobs"></div>
+		<div class="card-grid">
+			<div class="card">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-globe2" viewBox="0 0 16 16">
+					<path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855q-.215.403-.395.872c.705.157 1.472.257 2.282.287zM4.249 3.539q.214-.577.481-1.078a7 7 0 0 1 .597-.933A7 7 0 0 0 3.051 3.05q.544.277 1.198.49zM3.509 7.5c.036-1.07.188-2.087.436-3.008a9 9 0 0 1-1.565-.667A6.96 6.96 0 0 0 1.018 7.5zm1.4-2.741a12.3 12.3 0 0 0-.4 2.741H7.5V5.091c-.91-.03-1.783-.145-2.591-.332M8.5 5.09V7.5h2.99a12.3 12.3 0 0 0-.399-2.741c-.808.187-1.681.301-2.591.332zM4.51 8.5c.035.987.176 1.914.399 2.741A13.6 13.6 0 0 1 7.5 10.91V8.5zm3.99 0v2.409c.91.03 1.783.145 2.591.332.223-.827.364-1.754.4-2.741zm-3.282 3.696q.18.469.395.872c.552 1.035 1.218 1.65 1.887 1.855V11.91c-.81.03-1.577.13-2.282.287zm.11 2.276a7 7 0 0 1-.598-.933 9 9 0 0 1-.481-1.079 8.4 8.4 0 0 0-1.198.49 7 7 0 0 0 2.276 1.522zm-1.383-2.964A13.4 13.4 0 0 1 3.508 8.5h-2.49a6.96 6.96 0 0 0 1.362 3.675c.47-.258.995-.482 1.565-.667m6.728 2.964a7 7 0 0 0 2.275-1.521 8.4 8.4 0 0 0-1.197-.49 9 9 0 0 1-.481 1.078 7 7 0 0 1-.597.933M8.5 11.909v3.014c.67-.204 1.335-.82 1.887-1.855q.216-.403.395-.872A12.6 12.6 0 0 0 8.5 11.91zm3.555-.401c.57.185 1.095.409 1.565.667A6.96 6.96 0 0 0 14.982 8.5h-2.49a13.4 13.4 0 0 1-.437 3.008M14.982 7.5a6.96 6.96 0 0 0-1.362-3.675c-.47.258-.995.482-1.565.667.248.92.4 1.938.437 3.008zM11.27 2.461q.266.502.482 1.078a8.4 8.4 0 0 0 1.196-.49 7 7 0 0 0-2.275-1.52c.218.283.418.597.597.932m-.488 1.343a8 8 0 0 0-.395-.872C9.835 1.897 9.17 1.282 8.5 1.077V4.09c.81-.03 1.577-.13 2.282-.287z"/>
+				</svg>
+				<h2>Website Development</h2>
+				<p>
+					Get a professionally made beautiful website that showcases your business and connect to your costumers directly.
+				</p>
+			</div>
+			<div class="card">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-android" viewBox="0 0 16 16">
+					<path d="M2.76 3.061a.5.5 0 0 1 .679.2l1.283 2.352A8.9 8.9 0 0 1 8 5a8.9 8.9 0 0 1 3.278.613l1.283-2.352a.5.5 0 1 1 .878.478l-1.252 2.295C14.475 7.266 16 9.477 16 12H0c0-2.523 1.525-4.734 3.813-5.966L2.56 3.74a.5.5 0 0 1 .2-.678ZM5 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2m6 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+				</svg>
+				<h2>Android App Development</h2>
+				<p>
+					Modern apps for the biggest mobile operating system in the world.
+				</p>
+			</div>
+			<div class="card">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-apple" viewBox="0 0 16 16">
+					<path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516s1.52.087 2.475-1.258.762-2.391.728-2.43m3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422s1.675-2.789 1.698-2.854-.597-.79-1.254-1.157a3.7 3.7 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56s.625 1.924 1.273 2.796c.576.984 1.34 1.667 1.659 1.899s1.219.386 1.843.067c.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758q.52-1.185.473-1.282"/>
+					<path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516s1.52.087 2.475-1.258.762-2.391.728-2.43m3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422s1.675-2.789 1.698-2.854-.597-.79-1.254-1.157a3.7 3.7 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56s.625 1.924 1.273 2.796c.576.984 1.34 1.667 1.659 1.899s1.219.386 1.843.067c.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758q.52-1.185.473-1.282"/>
+				</svg>
+				<h2>iOS App Development</h2>
+				<p>
+					Apps for iPhones and iPads.
+				</p>
+			</div>
+			<div class="card">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-badge-ad" viewBox="0 0 16 16">
+					<path d="m3.7 11 .47-1.542h2.004L6.644 11h1.261L5.901 5.001H4.513L2.5 11zm1.503-4.852.734 2.426H4.416l.734-2.426zm4.759.128c-1.059 0-1.753.765-1.753 2.043v.695c0 1.279.685 2.043 1.74 2.043.677 0 1.222-.33 1.367-.804h.057V11h1.138V4.685h-1.16v2.36h-.053c-.18-.475-.68-.77-1.336-.77zm.387.923c.58 0 1.002.44 1.002 1.138v.602c0 .76-.396 1.2-.984 1.2-.598 0-.972-.449-.972-1.248v-.453c0-.795.37-1.24.954-1.24z"/>
+					<path d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+				</svg>
+				<h2>Google Adsense</h2>
+				<p>
+					Advertise directly to your target audience right on top of Googles search results.
+				</p>
+			</div>
+			<div class="card">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
+					<path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.9 3.9 0 0 0-1.417.923A3.9 3.9 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.9 3.9 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.9 3.9 0 0 0-.923-1.417A3.9 3.9 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599s.453.546.598.92c.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.5 2.5 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.5 2.5 0 0 1-.92-.598 2.5 2.5 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233s.008-2.388.046-3.231c.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92s.546-.453.92-.598c.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92m-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217m0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334"/>
+				</svg>
+				<h2>Social Media Management</h2>
+				<p>
+					Grow your following and connect to your audience through posts and advertising on the biggest social platforms.
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="testimonial-section">
+		<div class="testimonials">
+			<div class="testimony">
+				<img src="review1.jpeg">
+				<div class="details">
+					<h3>Italiano Christino</h3>
+					<span>Co-founder Working Inc.</span>
+				</div>
+				<p>Their team did an amazing job delivering our product exactly according to our specs.</p>
+			</div>
+			<div class="testimony">
+				<img src="review2.jpeg">
+				<div class="details">
+					<h3>Rob Bakerman</h3>
+					<span>CEO of Websites</span>
+				</div>
+				<p>We are very pleased with our results. They are fast and responsive to our needs. Overall an excellent experience.</p>
+			</div>
+			<div class="testimony">
+				<img src="review3.jpeg">
+				<div class="details">
+					<h3>Emily Smith</h3>
+					<span>Local Business Owner</span>
+				</div>
+				<p>They came up with the most cost effective way to maximize the returns from our limited budget.</p>
+			</div>
+		</div>
+	</div>
+	<div class="contact" id="contact">
+		<!--
+		<iframe src="https://www.google.com/maps/embed/v1/place?q=6CMP%2BP2H&center=23.23431495941716,77.43381925604949&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+		-->
+		<div class="contact-links">
+			<div class="contact-phone">
+				<span>+91 982 612 3456</span>
+				<a href="tel:+919826123456" class="call">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-telephone" viewBox="0 0 16 16">
+						<path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/>
+					</svg>
+					Call
+				</a>
+				<a href="https://wa.me/+919826123456" class="whatsapp">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+						<path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/>
+					</svg>
+					Whatsapp
+				</a>
+			</div>
+			<a href="mailto:companyname@gmail.com" class="email">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+					<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+				</svg>
+				companyname@gmail.com
+			</a>
+		</div>
+	</div>
+	<footer>
+		<div>
+			<h3>Products</h3>
+			<nav>
+			<ul>
+				<li><a href="#">Website Development</a></li>
+				<li><a href="#">iOS development</a></li>
+				<li><a href="#">Android Development</a></li>
+			</ul>
+			</nav>
+		</div>
+		<div>
+			<h3>Company</h3>
+			<nav>
+			<ul>
+				<li><a href="#">About us</a></li>
+				<li><a href="#">Contact us</a></li>
+			</ul>
+			</nav>
+		</div>
+		© Company 2024
+	</footer>
+
+	<svg style="display: block;" width="0" height="0">
+		<defs>
+		<clipPath id="blobs" clipPathUnits="objectBoundingBox">
+		<path d="M24.7,-36.5C35.2,-26.4,49.1,-23.4,58,-14.5C66.8,-5.6,70.7,9.3,66.4,21.3C62.2,33.3,49.8,42.4,37.4,46.9C25,51.4,12.5,51.3,2.9,47.3C-6.7,43.4,-13.4,35.5,-27,31.4C-40.5,27.3,-61,26.9,-70.7,18C-80.3,9.2,-79.2,-8.1,-70.9,-19.9C-62.7,-31.6,-47.4,-37.9,-34.4,-47.2C-21.4,-56.5,-10.7,-68.7,-1.8,-66.3C7.1,-63.8,14.2,-46.6,24.7,-36.5Z" transform="scale(.01)" />
+		<path d="M32.7,-43.3C46.2,-35.2,63.4,-30.7,73.5,-19.3C83.7,-7.8,86.6,10.6,79,23.1C71.5,35.7,53.5,42.2,38.6,40.5C23.6,38.7,11.8,28.6,0,28.6C-11.8,28.5,-23.5,38.5,-31.7,38.1C-39.9,37.7,-44.6,26.9,-43.2,17.3C-41.7,7.8,-34.2,-0.4,-27.9,-5.8C-21.7,-11.2,-16.8,-13.7,-12.3,-24.8C-7.9,-35.8,-3.9,-55.2,2.8,-59.1C9.6,-63.1,19.2,-51.4,32.7,-43.3Z" transform="translate(1 1), scale(.01)" />
+		</clipPath>
+		</defs>
+	</svg>
+
+</body>
+</html>
